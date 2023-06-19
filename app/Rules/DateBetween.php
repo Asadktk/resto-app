@@ -12,7 +12,7 @@ class DateBetween implements Rule
         $pickupDate = Carbon::parse($value)->format('Y-m-d');
         $lastDate = Carbon::now()->addWeek();
 
-        return $value >= now() && $value <= $lastDate;
+        return $pickupDate >= now() && $value <= $lastDate;
     }
 
     public function message()

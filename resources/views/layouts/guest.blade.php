@@ -52,7 +52,8 @@
                         <a class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 hover:text-green-400"
                             href="/">Home</a>
                         <a class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 hover:text-green-400"
-                            href="{{ route('frontendcategories.index') }}">Categories</a>
+                             href="{{ route('frontendcategories.index') }}">Categories</a>
+
                         <a class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 hover:text-green-400"
                             href="{{ route('frontendmenues.index') }}">Our Menu</a>
                         <a class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 hover:text-green-400"
@@ -62,7 +63,7 @@
                 </nav>
             </div>
 
-            <div class="w-full mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden m-h-screen sm:rounded-lg">
+            <div class="w-full mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden min-h-screen sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>

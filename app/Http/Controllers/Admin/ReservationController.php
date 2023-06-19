@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Validator;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
@@ -34,24 +34,31 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+  
+
     public function store(Request $request)
     {
-        // dd($request->all());
-        $table = Table::findOrFail($request->table_id);
-
-        if ($request->guest_number > $table->guest_number) {
-            return back()->with('warning', 'please choose the table base on Guest');
+        $table = Table::find($request->table_id);
+    
+        if ($table === null) {
+            return back()->with('error', 'Invalid table');
         }
-
+    
+        if ($request->guest_number > $table->guest_number) {
+            return back()->with('warning', 'Please choose a table based on the number of guests');
+        }
+    
         $request_date = Carbon::parse($request->res_date);
-
-        foreach($table->reservations as $res){
-            if($res->res_date->format('Y-m-d')  == $request_date->format('Y-m-d')){
-                return back()->with('warning', 'This table is reserved for this date');
+    
+        if ($table->reservations !== null) {
+            foreach ($table->reservations as $res) {
+                if ($res->res_date->format('Y-m-d') == $request_date->format('Y-m-d')) {
+                    return back()->with('warning', 'This table is reserved for this date');
+                }
             }
         }
     
-        $formFields = $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => ['required'],
             'email' => ['required', 'email'],
@@ -60,13 +67,18 @@ class ReservationController extends Controller
             'table_id' => 'required',
             'guest_number' => 'required'
         ]);
-
-        Reservation::create($formFields);
-
+    
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+    
+        Reservation::create($request->all());
+    
         return redirect()->route('reservations.index')->with('success', 'Reservation created successfully.');
     }
-
-    /**
+    
+  
+            /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -98,7 +110,9 @@ class ReservationController extends Controller
         $request_date = Carbon::parse($request->res_date);
         $reservations = $table->reservation()->where('id', '!=', $reservation->id)->get();
         foreach($reservations as $res){
-            if($res->res_date->format('Y-m-d')  == $request_date->format('Y-m-d')){
+            $resDate = Carbon::parse($res->res_date); // Convert the string to a DateTime object
+
+            if($resDate->format('Y-m-d')  == $request_date->format('Y-m-d')){
                 return back()->with('warning', 'This table is reserved for this date');
             }
         }

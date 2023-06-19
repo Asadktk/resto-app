@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
+use App\Models\Menu;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class WelcomeController extends Controller
 {
@@ -14,8 +15,9 @@ class WelcomeController extends Controller
     public function index()
     {
         $specials = Category::where('name', 'specials')->first();
-
-        return view('welcome', compact('specials'));
+        $menus = Menu::where('category_id', $specials->id)->get();
+    
+        return view('welcome', compact('menus'));
     }
 
     /**

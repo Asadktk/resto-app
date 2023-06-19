@@ -18,7 +18,7 @@ class Reservation extends Model
         'table_id',
     ];
 
-    protected $casts = [
+    protected $dates = [
         'res_date'
     ];
 

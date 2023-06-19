@@ -12,7 +12,9 @@ class Category extends Model
     protected $fillable = ['name', 'description', 'image'];
 
      //Relationship to Menu
-     public function menu(){
-        return $this->belongsToMany(Menu::class, 'category_id');
-    }
+     public function menus()
+     {
+         return $this->hasMany(Menu::class);
+     }
+     
 }

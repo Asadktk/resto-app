@@ -13,7 +13,7 @@ class Menu extends Model
 
      //Relationship to Category
      public function category(){
-        return $this->belongsToMany(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
 }
